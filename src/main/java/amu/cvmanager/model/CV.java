@@ -15,7 +15,7 @@ public class CV {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @OneToOne(mappedBy = "cv")
+    @OneToOne(mappedBy = "cv", optional = false)
     private Person person;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,  orphanRemoval = true)

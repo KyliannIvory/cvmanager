@@ -21,4 +21,9 @@ public class CV {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,  orphanRemoval = true)
     @JoinColumn(name = "cv_id", referencedColumnName = "id")
     private List<Activity> activities;
+
+    public CV(long id , List<Activity> activities) {
+        this.id = id;
+        this.activities = activities;
+    }
 }

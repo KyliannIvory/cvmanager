@@ -16,7 +16,7 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(nullable = false)
+    @Column(name="activity_year", nullable = false)
     private int year;
 
     @Column(nullable = false)

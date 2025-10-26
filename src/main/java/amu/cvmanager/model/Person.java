@@ -40,4 +40,12 @@ public class Person {
     @JoinColumn(name = "cv_id")
     private CV cv;
 
+    public Person(String lastName, String firstName, String email, String website, String password, LocalDate birthDate) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.email = email;
+        this.website = website;
+        this.password = password;
+        this.birthDate = birthDate;
+    }
 }

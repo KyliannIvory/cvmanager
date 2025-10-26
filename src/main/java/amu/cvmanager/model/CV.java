@@ -18,8 +18,7 @@ public class CV {
     @OneToOne(mappedBy = "cv")
     private Person person;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,  orphanRemoval = true)
-    @JoinColumn(name = "cv_id", referencedColumnName = "id")
+    @OneToMany(mappedBy = "cv")
     private List<Activity> activities;
 
     public CV(long id , List<Activity> activities) {

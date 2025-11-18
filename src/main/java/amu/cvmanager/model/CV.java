@@ -18,11 +18,10 @@ public class CV {
     @OneToOne(mappedBy = "cv")
     private Person person;
 
-    @OneToMany(mappedBy = "cv")
+    @OneToMany(mappedBy = "cv",  cascade = CascadeType.ALL,  orphanRemoval = true)
     private List<Activity> activities;
 
-    public CV(long id , List<Activity> activities) {
-        this.id = id;
+    public CV( List<Activity> activities) {
         this.activities = activities;
     }
 }

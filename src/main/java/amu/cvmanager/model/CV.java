@@ -15,15 +15,13 @@ public class CV {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @OneToOne(mappedBy = "cv", optional = false)
+    @OneToOne(mappedBy = "cv")
     private Person person;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,  orphanRemoval = true)
-    @JoinColumn(name = "cv_id", referencedColumnName = "id")
+    @OneToMany(mappedBy = "cv",  cascade = CascadeType.ALL,  orphanRemoval = true)
     private List<Activity> activities;
 
-    public CV(long id , List<Activity> activities) {
-        this.id = id;
+    public CV( List<Activity> activities) {
         this.activities = activities;
     }
 }

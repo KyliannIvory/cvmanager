@@ -16,7 +16,7 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(nullable = false)
+    @Column(name="activity_year", nullable = false)
     private int year;
 
     @Column(nullable = false)
@@ -30,4 +30,15 @@ public class Activity {
 
     private String webAddress;
 
+    @ManyToOne
+    @JoinColumn(name = "cv_id")
+    private CV cv;
+
+    public Activity(int year, ActivityType type, String title, String description, String webAddress) {
+        this.year = year;
+        this.type = type;
+        this.title = title;
+        this.description = description;
+        this.webAddress = webAddress;
+    }
 }

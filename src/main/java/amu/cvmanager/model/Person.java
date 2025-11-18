@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 import java.time.LocalDate;
 
@@ -36,7 +37,15 @@ public class Person {
     private LocalDate birthDate;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "cv_id", referencedColumnName = "id")
+    @JoinColumn(name = "cv_id")
     private CV cv;
 
+    public Person(String lastName, String firstName, String email, String website, String password, LocalDate birthDate) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.email = email;
+        this.website = website;
+        this.password = password;
+        this.birthDate = birthDate;
+    }
 }

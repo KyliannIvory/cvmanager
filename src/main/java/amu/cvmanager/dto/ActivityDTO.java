@@ -1,6 +1,7 @@
 package amu.cvmanager.dto;
 
 import amu.cvmanager.model.ActivityType;
+import amu.cvmanager.model.CV;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -22,6 +23,8 @@ public record ActivityDTO(
 
         String description,
 
-        String webAddress
+        String webAddress,
+
+        CV cv
 
 ) {}

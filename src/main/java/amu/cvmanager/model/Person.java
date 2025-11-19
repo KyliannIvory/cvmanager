@@ -48,4 +48,10 @@ public class Person {
         this.password = password;
         this.birthDate = birthDate;
     }
+
+    public void assingCV(CV cv) {
+        this.cv = cv;
+        if (cv.getPerson() != this)
+            cv.assignPerson(this);
+    }
 }

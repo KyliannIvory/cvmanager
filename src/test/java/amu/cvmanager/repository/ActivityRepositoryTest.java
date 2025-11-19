@@ -2,6 +2,7 @@ package amu.cvmanager.repository;
 
 import amu.cvmanager.model.Activity;
 import amu.cvmanager.model.ActivityType;
+import amu.cvmanager.model.CV;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class ActivityRepositoryTest {
 
     @BeforeEach
      void setup() {
-        activity = new Activity(2025,  ActivityType.PROJECT, "cvmanager", "description de cvmanager", "www.cvmanager.ci");
+        activity = new Activity(2025,  ActivityType.PROJECT, "cvmanager", "description de cvmanager", "www.cvmanager.ci", new CV());
     }
 
     @Test

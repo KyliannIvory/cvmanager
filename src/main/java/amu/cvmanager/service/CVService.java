@@ -7,6 +7,8 @@ import amu.cvmanager.repository.CVRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class CVService {
@@ -15,6 +17,10 @@ public class CVService {
 
     public CVService(CVRepository cvRepository) {
         this.cvRepository = cvRepository;
+    }
+
+    public List<CV> findAllCVs() {
+        return cvRepository.findAll();
     }
 
 

@@ -2,30 +2,36 @@ package amu.cvmanager.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-public record PersonDTO(
-
-        long id,
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class PersonDTO {
+        private long id;
 
         @NotBlank(message = "Le prénom est obligatoire")
-        String firstName,
+        private String firstName;
 
         @NotBlank( message = "Le nom est obligatoire")
-        String lastName,
+        private String lastName;
 
         @Email(message = "L'email doit être valide")
         @NotBlank (message = "L'email est obligatoire")
-        String email,
+        private String email;
 
-        String website,
+        private String website;
 
         @NotBlank(message = "Le mot de passe est obligatoire")
-        String password,
+        private String password;
 
-        LocalDate birthDate,
+        private LocalDate birthDate;
 
-        CVDTO cv
-
-) {}
+        private CVDTO cv; // CVDTO doit également être converti
+}

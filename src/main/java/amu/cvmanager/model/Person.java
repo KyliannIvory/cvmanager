@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.rest.core.annotation.RestResource;
 
 import java.time.LocalDate;
 
@@ -47,5 +46,11 @@ public class Person {
         this.website = website;
         this.password = password;
         this.birthDate = birthDate;
+    }
+
+    public void assignCV(CV cv) {
+        this.cv = cv;
+        if (cv.getPerson() != this)
+            cv.assignPerson(this);
     }
 }

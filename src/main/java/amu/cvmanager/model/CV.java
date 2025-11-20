@@ -24,4 +24,20 @@ public class CV {
     public CV( List<Activity> activities) {
         this.activities = activities;
     }
+
+    public void addActivity(Activity activity) {
+        activities.add(activity);
+        activity.setCv(this);
+    }
+
+    public void removeActivity(Activity activity) {
+        activities.remove(activity);
+        activity.setCv(null);
+    }
+
+    public void assignPerson(Person person) {
+        this.person = person;
+        if( person.getCv() != this )
+            person.setCv(this);
+    }
 }

@@ -34,11 +34,14 @@ public class Activity {
     @JoinColumn(name = "cv_id")
     private CV cv;
 
-    public Activity(int year, ActivityType type, String title, String description, String webAddress) {
+    public Activity(int year, ActivityType type, String title, String description, String webAddress, CV cv) {
         this.year = year;
         this.type = type;
         this.title = title;
         this.description = description;
         this.webAddress = webAddress;
+        this.cv = cv;
     }
+
+    
 }

@@ -59,5 +59,12 @@ public class PersonService {
         Person person = findPersonById(id);
         personRepository.delete(person);
     }
+    public List<Person> searchPersons(String searchTerm) {
+        // Optionnel : si le terme est vide, nous déléguons au Repository de retourner tous ou une liste vide.
+        if (searchTerm == null || searchTerm.trim().isEmpty()) {
+            return personRepository.findAll();
+        }
+        return personRepository.searchPersons(searchTerm);
+    }
 
 }

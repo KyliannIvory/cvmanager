@@ -59,4 +59,10 @@ public class PersonController {
         service.deletePersonById(id);
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("/search")
+    public List<PersonDTO> searchPersons(@RequestParam("q") String query) {
+        return service.searchPersons(query).stream()
+                .map(person -> modelMapper.map(person, PersonDTO.class))
+                .collect(Collectors.toList());
+    }
 }

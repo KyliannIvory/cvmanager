@@ -64,7 +64,7 @@ class ModelMapperTest {
 
         // Vérifier le DTO Activité imbriqué
         assertFalse(personDTO.getCv().getActivities().isEmpty());
-        ActivityDTO activityDTO = personDTO.getCv().getActivities().get(0);
+        ActivityDTO activityDTO = personDTO.getCv().getActivities().getFirst();
         assertEquals("Projet JEE", activityDTO.getTitle());
         assertEquals(ActivityType.PROJECT, activityDTO.getType());
     }

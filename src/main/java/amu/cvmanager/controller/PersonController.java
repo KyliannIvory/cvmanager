@@ -1,43 +1,57 @@
 package amu.cvmanager.controller;
 
 
+import amu.cvmanager.dto.PersonDTO;
 import amu.cvmanager.model.Person;
 import amu.cvmanager.service.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/cvmanager/persons")
 public class PersonController {
 
     private final PersonService service;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    public PersonController(PersonService service){
+    // Mise à jour pour inclure ModelMapper dans le constructeur
+    public PersonController(PersonService service, ModelMapper modelMapper){
         this.service = service;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping()
-    public List<Person> findAllPersons() {
-        return service.findAllpersons();
+    public List<PersonDTO> findAllPersons() {
+        return service.findAllpersons().stream()
+                .map(person -> modelMapper.map(person, PersonDTO.class)) // Mapping Entité -> DTO
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Person> findPersonById(@PathVariable long id) {
-        return ResponseEntity.ok(service.findPersonById(id));
+    public ResponseEntity<PersonDTO> findPersonById(@PathVariable long id) {
+        Person person = service.findPersonById(id);
+        PersonDTO personDTO = modelMapper.map(person, PersonDTO.class); // Mapping Entité -> DTO
+        return ResponseEntity.ok(personDTO);
     }
 
     @PostMapping()
-    public ResponseEntity<Person> createPerson(@RequestBody Person person) {
-        return ResponseEntity.ok(service.createPerson(person));
+    public ResponseEntity<PersonDTO> createPerson(@RequestBody PersonDTO personDTO) {
+        Person personRequest = modelMapper.map(personDTO, Person.class); // Mapping DTO -> Entité
+        Person person = service.createPerson(personRequest);
+        PersonDTO responseDTO = modelMapper.map(person, PersonDTO.class); // Mapping Entité -> DTO
+        return ResponseEntity.ok(responseDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Person> updatePerson(@PathVariable long id, @RequestBody Person person) {
-        return ResponseEntity.ok(service.updatePerson(id, person));
+    public ResponseEntity<PersonDTO> updatePerson(@PathVariable long id, @RequestBody PersonDTO personDTO) {
+        Person personRequest = modelMapper.map(personDTO, Person.class); // Mapping DTO -> Entité
+        Person person = service.updatePerson(id, personRequest);
+        PersonDTO responseDTO = modelMapper.map(person, PersonDTO.class); // Mapping Entité -> DTO
+        return ResponseEntity.ok(responseDTO);
     }
 
     @DeleteMapping("/{id}")

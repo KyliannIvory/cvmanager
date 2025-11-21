@@ -3,6 +3,7 @@ package amu.cvmanager.service;
 import amu.cvmanager.exception.PersonNotFoundException;
 import amu.cvmanager.model.Person;
 import amu.cvmanager.repository.PersonRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,13 +14,18 @@ import java.util.List;
 public class PersonService {
 
     private final PersonRepository personRepository;
+    private final PasswordEncoder passwordEncoder; // AJOUTÉ
 
 
-    public PersonService(PersonRepository personRepository){
+    public PersonService(PersonRepository personRepository, PasswordEncoder passwordEncoder){
         this.personRepository = personRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Person createPerson(Person person) {
+
+        // CRYPTAGE DU MOT DE PASSE LORS DE LA CRÉATION
+        person.setPassword(passwordEncoder.encode(person.getPassword()));
 
         if (person.getCv() != null) {
             person.assignCV(person.getCv());

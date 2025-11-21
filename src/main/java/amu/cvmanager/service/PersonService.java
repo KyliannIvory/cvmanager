@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -37,6 +38,9 @@ public class PersonService {
     public Person findPersonById(long id) {
         return personRepository.findById(id)
                 .orElseThrow(() -> new PersonNotFoundException("Person not found"));
+    }
+    public Optional<Person> findPersonByEmail(String email) {
+        return personRepository.findByEmail(email);
     }
 
     public List<Person> findAllpersons(){

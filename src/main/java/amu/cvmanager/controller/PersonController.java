@@ -43,6 +43,7 @@ public class PersonController {
         Person personRequest = modelMapper.map(personDTO, Person.class); // Mapping DTO -> Entité
         Person person = service.createPerson(personRequest);
         PersonDTO responseDTO = modelMapper.map(person, PersonDTO.class); // Mapping Entité -> DTO
+        System.out.println("Person created: " + person.getLastName()+person.getFirstName());
         return ResponseEntity.ok(responseDTO);
     }
 

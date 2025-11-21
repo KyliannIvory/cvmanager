@@ -15,6 +15,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -43,7 +49,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                // AJOUT DU POINT D'ENTRÉE POUR GÉRER L'ERREUR 401
+                // ⬅️ INTÉGRATION DU BEAN CORS DIRECTEMENT DANS LA CHAÎNE DE SÉCURITÉ
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 )
@@ -51,18 +58,37 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(authorize -> authorize
-                        // Les endpoints de consultation sont publics (GET)
-                        .requestMatchers(HttpMethod.GET, "/cvmanager/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/persons/**").permitAll()
-                        // Endpoint de connexion est public (POST)
+                        .requestMatchers(HttpMethod.GET, "/persons/**", "/cvmanager/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-                        // Tout le reste (POST, PUT, DELETE) nécessite une authentification
                         .anyRequest().authenticated()
                 );
 
-        // AJOUT DU FILTRE JWT AVANT LE FILTRE DE BASE DE SPRING SECURITY
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    /**
+     * Définit le CorsConfigurationSource pour Spring Security.
+     * Cette méthode garantit que le header Authorization est autorisé.
+     */
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        // ⬅️ CRUCIAL : L'origine de notre serveur de développement VueJS (Vite)
+        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+
+        // Autoriser les méthodes standard et la pré-vérification OPTIONS
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        // ⬅️ CRUCIAL : Autoriser les headers Content-Type et Authorization
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Appliquer à toutes les URL
+        return source;
     }
 }

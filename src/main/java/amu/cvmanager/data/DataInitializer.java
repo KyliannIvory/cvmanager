@@ -4,7 +4,6 @@ import amu.cvmanager.model.Person;
 import amu.cvmanager.repository.PersonRepository;
 import amu.cvmanager.service.PersonService;
 import jakarta.annotation.PostConstruct; // Import pour l'annotation
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component; // Changement de @Configuration à @Component
 
@@ -37,8 +36,6 @@ public class DataInitializer {
             personRepository.save(testUser);
 
             System.out.println("✅ UTILISATEUR DE TEST CRÉÉ :"+personService.findPersonByEmail(") Email: test@amu.fr, Mot de passe: motdepasse"));
-            System.out.println("✅ UTILISATEUR DE TEST CRÉÉ :"+personService.findPersonByEmail("test@amu.fr").get().getEmail()+" "+personService.findPersonByEmail("test@amu.fr").get().getPassword());
-
         }
     }
 }

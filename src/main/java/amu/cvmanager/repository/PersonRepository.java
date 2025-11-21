@@ -8,11 +8,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
 @Transactional
 public interface PersonRepository extends JpaRepository<Person,Long> {
+
+    Optional<Person> findByEmail(String email);
 
     /**
      * Recherche de personnes dont le nom, le prénom ou le titre d'une activité

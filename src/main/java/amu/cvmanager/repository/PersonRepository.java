@@ -21,9 +21,18 @@ public interface PersonRepository extends JpaRepository<Person,Long> {
      * Recherche de personnes dont le nom, le prénom ou le titre d'une activité
      * correspond au terme de recherche (insensible à la casse).
      */
-    @Query("SELECT DISTINCT p FROM Person p LEFT JOIN p.cv cv LEFT JOIN cv.activities a " +
+   /* @Query("SELECT DISTINCT p FROM Person p LEFT JOIN p.cv cv LEFT JOIN cv.activities a " +
             "WHERE LOWER(p.lastName) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
             "OR LOWER(p.firstName) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
+            "OR LOWER(a.title) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
+
+    */
+    @Query("SELECT DISTINCT p FROM Person p LEFT JOIN p.cv cv LEFT JOIN cv.activities a " +
+            // ⬅️ CORRECTION 1: Recherche par Nom + Prénom concaténés
+            "WHERE LOWER(CONCAT(p.firstName, ' ', p.lastName)) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
+            // ⬅️ OPTIONNEL : Chercher aussi dans l'ordre Prénom + Nom
+            "OR LOWER(CONCAT(p.lastName, ' ', p.firstName)) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
+            // ⬅️ Recherche dans le titre d'activité
             "OR LOWER(a.title) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
     List<Person> searchPersons(@Param("searchTerm") String searchTerm);
 }

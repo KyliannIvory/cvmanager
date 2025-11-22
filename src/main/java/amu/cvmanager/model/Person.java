@@ -48,6 +48,16 @@ public class Person {
         this.birthDate = birthDate;
     }
 
+    public Person(String lastName, String firstName, String email, String website, String password, LocalDate birthDate, CV cv) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.email = email;
+        this.website = website;
+        this.password = password;
+        this.birthDate = birthDate;
+        this.cv = cv;
+    }
+
     public void assignCV(CV cv) {
         this.cv = cv;
         if (cv.getPerson() != this)

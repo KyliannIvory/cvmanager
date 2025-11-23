@@ -12,9 +12,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CVSearchedDTO {
+public class CVDTOv2 {
 
     private long id;
-    private PersonSearchedDTO person;
+    private PersonDTOv2 person;
     private List<ActivityDTO> activities;
 }

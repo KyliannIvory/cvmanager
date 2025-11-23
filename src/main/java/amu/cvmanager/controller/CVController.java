@@ -31,10 +31,11 @@ public class CVController {
         return ResponseEntity.ok(responseDTO);
     }
 
+    //test avec CVSearchedDTO
     @GetMapping()
-    public List<CVDTO> findAllCVs() {
+    public List<CVSearchedDTO> findAllCVs() {
         return service.findAllCVs().stream()
-                .map(cv -> modelMapper.map(cv, CVDTO.class)) // Entité -> DTO
+                .map(cv -> modelMapper.map(cv, CVSearchedDTO.class)) // Entité -> DTO
                 .collect(Collectors.toList());
     }
 

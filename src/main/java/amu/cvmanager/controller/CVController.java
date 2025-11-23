@@ -1,6 +1,7 @@
 package amu.cvmanager.controller;
 
 import amu.cvmanager.dto.CVDTO;
+import amu.cvmanager.dto.CVSearchedDTO;
 import amu.cvmanager.model.CV;
 import amu.cvmanager.service.CVService;
 import org.modelmapper.ModelMapper;
@@ -56,5 +57,12 @@ public class CVController {
     public ResponseEntity<Void> deleteCV(@PathVariable long id) {
         service.deleteCVById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search")
+    public List<CVSearchedDTO> findCVsByName(@RequestParam("q") String query) {
+        return service.searchCVs(query).stream()
+                .map(cv -> modelMapper.map(cv, CVSearchedDTO.class))
+                .collect(Collectors.toList());
     }
 }

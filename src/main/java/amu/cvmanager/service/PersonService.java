@@ -77,4 +77,10 @@ public class PersonService {
         return personRepository.searchPersons(searchTerm);
     }
 
+    public Person findByEmail(String email) {
+        return personRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Person not found"));
+    }
+
+
 }

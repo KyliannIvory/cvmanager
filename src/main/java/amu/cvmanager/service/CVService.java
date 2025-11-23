@@ -49,4 +49,14 @@ public class CVService {
         CV foundedCV = findCVById(id);
         cvRepository.deleteById(id);
     }
+
+
+    public List<CV> searchCVs(String searchTerm){
+        if (searchTerm == null || searchTerm.trim().isEmpty()){
+            return cvRepository.findAll();
+        }
+        return cvRepository.searchCVs(searchTerm);
+    }
+
+
 }

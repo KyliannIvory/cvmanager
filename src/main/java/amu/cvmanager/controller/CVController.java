@@ -1,6 +1,7 @@
 package amu.cvmanager.controller;
 
 import amu.cvmanager.dto.CVDTO;
+import amu.cvmanager.dto.CVDTOv2;
 import amu.cvmanager.model.CV;
 import amu.cvmanager.service.CVService;
 import org.modelmapper.ModelMapper;
@@ -30,25 +31,26 @@ public class CVController {
         return ResponseEntity.ok(responseDTO);
     }
 
+    //test avec CVSearchedDTO
     @GetMapping()
-    public List<CVDTO> findAllCVs() {
+    public List<CVDTOv2> findAllCVs() {
         return service.findAllCVs().stream()
-                .map(cv -> modelMapper.map(cv, CVDTO.class)) // Entité -> DTO
+                .map(cv -> modelMapper.map(cv, CVDTOv2.class)) // Entité -> DTO
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CVDTO> findCVById(@PathVariable long id) {
+    public ResponseEntity<CVDTOv2> findCVById(@PathVariable long id) {
         CV cv = service.findCVById(id);
-        CVDTO responseDTO = modelMapper.map(cv, CVDTO.class); // Entité -> DTO
+        CVDTOv2 responseDTO = modelMapper.map(cv, CVDTOv2.class); // Entité -> DTO
         return ResponseEntity.ok(responseDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CVDTO> updateCV(@PathVariable long id, @RequestBody CVDTO cvDTO) {
+    public ResponseEntity<CVDTOv2> updateCV(@PathVariable long id, @RequestBody CVDTOv2 cvDTO) {
         CV cvRequest = modelMapper.map(cvDTO, CV.class); // DTO -> Entité
         CV cv = service.updateCV(id, cvRequest);
-        CVDTO responseDTO = modelMapper.map(cv, CVDTO.class); // Entité -> DTO
+        CVDTOv2 responseDTO = modelMapper.map(cv, CVDTOv2.class); // Entité -> DTO
         return ResponseEntity.ok(responseDTO);
     }
 
@@ -56,5 +58,12 @@ public class CVController {
     public ResponseEntity<Void> deleteCV(@PathVariable long id) {
         service.deleteCVById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search")
+    public List<CVDTOv2> findCVsByName(@RequestParam("q") String query) {
+        return service.searchCVs(query).stream()
+                .map(cv -> modelMapper.map(cv, CVDTOv2.class))
+                .collect(Collectors.toList());
     }
 }

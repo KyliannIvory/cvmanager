@@ -66,4 +66,12 @@ public class PersonController {
                 .map(person -> modelMapper.map(person, PersonDTO.class))
                 .collect(Collectors.toList());
     }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<PersonDTO> findPersonByEmail(@PathVariable String email) {
+        Person person = service.findByEmail(email);
+        PersonDTO dto = modelMapper.map(person, PersonDTO.class);
+        return ResponseEntity.ok(dto);
+    }
+
 }

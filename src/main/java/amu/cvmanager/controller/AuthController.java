@@ -1,7 +1,11 @@
 package amu.cvmanager.controller;
 
 import amu.cvmanager.dto.LoginDTO;
+import amu.cvmanager.dto.LoginResponseDTO;
+import amu.cvmanager.model.Person;
 import amu.cvmanager.security.JwtTokenProvider;
+import amu.cvmanager.service.PersonService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,15 +22,18 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final PersonService personService; // ⬅️ PersonService injecté
 
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, PersonService personService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.personService = personService; // ⬅️ PersonService injecté
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> authenticateUser(@RequestBody LoginDTO loginDto) {
+    public ResponseEntity<LoginResponseDTO> authenticateUser(@RequestBody LoginDTO loginDto) {
 
+        // 1. Authentification de l'utilisateur (vérification du mot de passe haché)
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDto.getEmail(),
@@ -40,7 +47,21 @@ public class AuthController {
         // 3. Génère le jeton JWT
         String token = jwtTokenProvider.generateToken(authentication);
 
-        // 4. Renvoie le jeton dans le corps de la réponse
-        return ResponseEntity.ok(token);
+        // 4. Récupération des informations de la Personne pour la réponse frontend
+        String userEmail = authentication.getName();
+        Person person = personService.findPersonByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé après l'authentification."));
+
+        // 5. Construction du DTO de réponse complet
+        LoginResponseDTO response = new LoginResponseDTO(
+                token,
+                person.getId(),
+                person.getEmail(),
+                person.getFirstName(),
+                person.getLastName()
+        );
+
+        // 6. Renvoie le DTO avec les infos et le jeton
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

@@ -27,6 +27,7 @@ public interface PersonRepository extends JpaRepository<Person,Long> {
             "OR LOWER(a.title) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
 
     */
+
     @Query("SELECT DISTINCT p FROM Person p LEFT JOIN p.cv cv LEFT JOIN cv.activities a " +
             // ⬅️ CORRECTION 1: Recherche par Nom + Prénom concaténés
             "WHERE LOWER(CONCAT(p.firstName, ' ', p.lastName)) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +

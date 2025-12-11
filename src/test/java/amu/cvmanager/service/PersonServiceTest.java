@@ -26,6 +26,9 @@ class PersonServiceTest {
     @Mock
     private PersonRepository personRepository;
 
+    @Mock
+    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private PersonService personService;
 
@@ -57,6 +60,8 @@ class PersonServiceTest {
 
     @Test
     void testCreatePerson() {
+
+        when(passwordEncoder.encode(any(CharSequence.class))).thenReturn("hashed_password");
         when(personRepository.save(any(Person.class))).thenReturn(person1);
 
         Person created = personService.createPerson(person1);

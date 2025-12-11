@@ -25,9 +25,10 @@ public class CVController {
 
     @PostMapping
     public ResponseEntity<CVDTO> createCV(@RequestBody CVDTO cvDTO) {
-        CV cvRequest = modelMapper.map(cvDTO, CV.class); // DTO -> Entité
+        // ... (Logique de création)
+        CV cvRequest = modelMapper.map(cvDTO, CV.class);
         CV cv = service.createCV(cvRequest);
-        CVDTO responseDTO = modelMapper.map(cv, CVDTO.class); // Entité -> DTO
+        CVDTO responseDTO = modelMapper.map(cv, CVDTO.class);
         return ResponseEntity.ok(responseDTO);
     }
 
@@ -35,27 +36,29 @@ public class CVController {
     @GetMapping()
     public List<CVDTOv2> findAllCVs() {
         return service.findAllCVs().stream()
-                .map(cv -> modelMapper.map(cv, CVDTOv2.class)) // Entité -> DTO
+                .map(cv -> modelMapper.map(cv, CVDTOv2.class))
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CVDTOv2> findCVById(@PathVariable long id) {
         CV cv = service.findCVById(id);
-        CVDTOv2 responseDTO = modelMapper.map(cv, CVDTOv2.class); // Entité -> DTO
+        CVDTOv2 responseDTO = modelMapper.map(cv, CVDTOv2.class);
         return ResponseEntity.ok(responseDTO);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CVDTOv2> updateCV(@PathVariable long id, @RequestBody CVDTOv2 cvDTO) {
-        CV cvRequest = modelMapper.map(cvDTO, CV.class); // DTO -> Entité
+        // Le service gère la vérification de propriété avant d'exécuter la mise à jour
+        CV cvRequest = modelMapper.map(cvDTO, CV.class);
         CV cv = service.updateCV(id, cvRequest);
-        CVDTOv2 responseDTO = modelMapper.map(cv, CVDTOv2.class); // Entité -> DTO
+        CVDTOv2 responseDTO = modelMapper.map(cv, CVDTOv2.class);
         return ResponseEntity.ok(responseDTO);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCV(@PathVariable long id) {
+        // Le service gère la vérification de propriété avant d'exécuter la suppression
         service.deleteCVById(id);
         return ResponseEntity.noContent().build();
     }

@@ -49,7 +49,6 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                // ⬅️ INTÉGRATION DU BEAN CORS DIRECTEMENT DANS LA CHAÎNE DE SÉCURITÉ
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
@@ -58,8 +57,17 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(authorize -> authorize
+                        // RÈGLES DE SÉCURITÉ MISES À JOUR
                         .requestMatchers(HttpMethod.GET, "/persons/**", "/cvmanager/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
+
+                        // ⬅️ NOUVEAU : Le point d'enregistrement doit être public (pas encore de token)
+                        .requestMatchers(HttpMethod.POST, "/api/invitations/register-invited").permitAll()
+
+                        // ⬅️ NOUVEAU : L'envoi doit être protégé (seul un user connecté peut inviter)
+                        .requestMatchers(HttpMethod.POST, "/api/invitations/send").authenticated()
+
+                        // Tous les autres chemins doivent être authentifiés
                         .anyRequest().authenticated()
                 );
 
